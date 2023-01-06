@@ -23,4 +23,7 @@ export class HttpService {
   unpark(id: string) {
     return this.http.patch(`http://localhost:4000/api/v1/parking/${id}`, {});
   }
+  checkHisotry(plateNo:string){
+    return this.http.get(`http://localhost:4000/api/v1/parking/check-history/${plateNo}`)
+  }
 }

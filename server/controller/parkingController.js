@@ -2,13 +2,11 @@ const Parking = require("../models/parkingModel");
 const VehicleDetail = require("../models/vehicleDetails");
 
 exports.createParking = async (req, res, next) => {
-  //   //   for (let i = 1; i < 7; i++) {
   //   let parkObj = {
   //     parkingSize: 3,
   //     entryPoint: "C",
   //     parkingSlot: 6,
   //     status: "available",
-  //   };
   //   console.log(parkObj);
   //   const parking = await Parking.create(parkObj);
   //   //   console.log(parking);
@@ -21,7 +19,28 @@ exports.getParking = async (req, res, next) => {
   res.status(200).json({ parkings: parkings, total: parkings.length });
 };
 
-exports.checkVehicleHistory = async (req, res, next) => {};
+exports.checkVehicleHistory = async (req, res, next) => {
+  const { plateNo } = req.params;
+
+  const vehicle = await VehicleDetail.find({ plateNumber: plateNo })
+    .sort({
+      endTime: -1,
+    })
+    .populate("parkingId");
+  console.log(vehicle);
+  let timeSpan = null;
+  if (vehicle.length) {
+    const endDate = new Date(vehicle[0].endTime).getTime();
+    timeSpan = new Date().getTime() - endDate;
+    console.log(timeSpan);
+  }
+
+  res.status(200).json({
+    history: vehicle,
+    continousPayment:
+      timeSpan > 3600000 ? false : timeSpan == null ? false : true,
+  });
+};
 
 exports.checkAvailableParking = async (req, res, next) => {
   const { entryPoint, vehicleSize } = req.body;
@@ -76,14 +95,28 @@ exports.getVehicleDetails = async (req, res, next) => {
 
 exports.unpark = async (req, res, next) => {
   const { id } = req.params;
-  const park = await Parking.findById({ _id: id });
 
+  //CHANGE STATUS OF PARKING SLOT TO AVAILABLE
+  const park = await Parking.findById({ _id: id });
   park.status = "available";
-  console.log(park);
   const unPark = await Parking.findByIdAndUpdate({ _id: id }, park, {
     new: true,
     runValidators: true,
   });
 
-  res.status(200).json({ unPark });
+  //ADD ENDTIME TO VEHICLE PARKED
+  const vehicle = await VehicleDetail.find({ parkingId: id }).sort({
+    startTime: -1,
+  });
+  vehicle[0].endTime = new Date();
+  const updateVehicle = await VehicleDetail.findByIdAndUpdate(
+    { _id: vehicle[0]._id },
+    vehicle[0],
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).json({ unPark, vehicle: updateVehicle });
 };

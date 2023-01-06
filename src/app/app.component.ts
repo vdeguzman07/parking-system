@@ -3,6 +3,7 @@ import { HttpService } from './../http/http.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ export class AppComponent {
   constructor(
     private http: HttpService,
     private fb: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sb: MatSnackBar
   ) {
     this.fetchParking();
 
@@ -34,7 +36,6 @@ export class AppComponent {
       entryPoint: ['', Validators.required],
       vehicleSize: ['', Validators.required],
     });
-
     // this.vehicleDetails.get('entryPoint')?.valueChanges.subscribe((res:any)=>{
     //   if(res==)
     // })
@@ -61,10 +62,24 @@ export class AppComponent {
       startTime: new Date(),
     };
     console.log(data);
-    this.http.startParking(data).subscribe((res: any) => {
+
+    //TODO ADD CHECK HISTORY FOR CONTINOUS PAYMENT
+    this.http.checkHisotry(data.plateNumber).subscribe((res: any) => {
       console.log(res);
-      this.vehicleDetails.reset();
-      this.fetchParking();
+      if (res.continousPayment === true) {
+        this.sb.open(
+          'Our System Detected that you returned in our parking complex within 1 hour, continous rate will apply',
+          'ok',
+          { duration: 6000 }
+        );
+        data.startTime = new Date(res.history[0].startTime);
+      }
+
+      this.http.startParking(data).subscribe((res: any) => {
+        console.log(res);
+        this.vehicleDetails.reset();
+        this.fetchParking();
+      });
     });
   }
 
@@ -82,5 +97,12 @@ export class AppComponent {
         console.log(res);
         if (res) this.fetchParking();
       });
+  }
+
+  checkHisotry() {
+    const plate = 'JR07';
+    this.http.checkHisotry(plate).subscribe((res: any) => {
+      console.log(res);
+    });
   }
 }

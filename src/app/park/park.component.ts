@@ -35,6 +35,7 @@ export class ParkComponent implements OnInit {
       console.log(`${hours}:${minutes}`);
 
       this.totalHours = hours;
+      //roundup if minutes is >=30
       if (minutes > 29) this.totalHours = this.totalHours + 1;
 
       console.log(this.totalHours, 'TOTALLLLLL');
@@ -42,7 +43,6 @@ export class ParkComponent implements OnInit {
 
       if (this.totalHours < 4) {
         this.totalPrice = this.defaultPrice;
-        console.log(this.totalPrice);
       } else if (this.totalHours > 3 && this.totalHours < 24) {
         if (this.data.parkingSize === 1) {
           const multiplierPrice = 20;
@@ -68,7 +68,7 @@ export class ParkComponent implements OnInit {
           this.totalPrice = totalPayable;
           console.log(this.totalPrice);
         }
-      } else if (this.totalHours == 24) {
+      } else if (this.totalHours >= 24) {
         this.totalPrice = 5000;
         const staticPrice = 5000;
         if (this.data.parkingSize === 1) {

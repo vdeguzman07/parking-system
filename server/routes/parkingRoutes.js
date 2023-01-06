@@ -9,4 +9,6 @@ router.route("/check").post(parkingController.checkAvailableParking);
 
 router.route("/get-details/:id").get(parkingController.getVehicleDetails);
 
+router.route('/check-history/:plateNo').get(parkingController.checkVehicleHistory)
+
 module.exports = router;
