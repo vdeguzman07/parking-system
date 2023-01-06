@@ -2,14 +2,17 @@
   display: flex;
   flex-direction: column;
   .park-wrap {
-    width: 140px;
-    height: 60px;
-    border: 1px solid #777777;
+    width: 150px;
+    height: 65px;
+    border: 2px solid #fff;
   }
 }
 .container {
   height: 100vh;
   width: 100%;
+  background-image: url("../assets/asphalt.jpg");
+  background-size: contain;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,7 +42,7 @@
 }
 
 .red {
-  background-color: rgb(220, 39, 39);
+  background-color: rgba(220, 39, 39, 0.069);
   &:hover {
     background-color: rgb(183, 82, 82);
     cursor: pointer;
@@ -71,18 +74,9 @@
     margin-top: 0rem;
     color: #565656;
   }
-  //   button {
-  //     margin-top: 1rem;
-  //     outline: none;
-  //     border: none;
-  //     background-color: #66b6d2;
-  //     color: #fff;
-  //     width: 100%;
-  //     border-radius: 3px;
-  //     height: 2rem;
-  //     &:hover {
-  //       cursor: pointer;
-  //       background-color: #2596be;
-  //     }
-  //   }
+}
+
+.car {
+  // height: 0.5rem;
+  width: 6.5rem;
 }

@@ -58,18 +58,22 @@
           style="border-right: none"
           (click)="showDetails(park)"
         >
-          <p
-            [class]="park.status === 'unavailable' ? 'light' : 'dark'"
-            style="text-align: center; margin: 0"
-          >
+          <p class="light" style="text-align: center; margin: 0">
             {{
               park.parkingSize === 1
-                ? "small parking"
+                ? "S Parking"
                 : park.parkingSize === 2
-                ? "medium parking"
-                : "large parking"
+                ? "M Parking"
+                : "L Parking"
             }}
             - <b>{{ park.entryPoint }}{{ park.parkingSlot }}</b>
+
+            <img
+              *ngIf="park.status === 'unavailable'"
+              class="car"
+              src="../assets/yellow-car-removebg-preview.png"
+              alt=""
+            />
           </p>
         </div>
       </div>
@@ -77,10 +81,11 @@
   </div>
   <h3
     style="
-      margin-bottom: 400px;
+      margin-bottom: 370px;
       /* text-orientation: upright; */
       writing-mode: vertical-rl;
-      color: #565656;
+      color: #f9f9f9;
+      letter-spacing: 0.5rem;
     "
   >
     ENTRY &nbsp;<b>A > > ></b>
@@ -94,18 +99,21 @@
           style="border-left: none"
           (click)="showDetails(park)"
         >
-          <p
-            [class]="park.status === 'unavailable' ? 'light' : 'dark'"
-            style="text-align: center; margin: 0"
-          >
+          <p class="light" style="text-align: center; margin: 0">
             {{
               park.parkingSize === 1
-                ? "small parking"
+                ? "S Parking"
                 : park.parkingSize === 2
-                ? "medium parking"
-                : "large parking"
+                ? "M Parking"
+                : "L Parking"
             }}
             - <b>{{ park.entryPoint }}{{ park.parkingSlot }}</b>
+            <img
+              *ngIf="park.status === 'unavailable'"
+              class="car"
+              src="../assets/yellow-car-removebg-preview.png"
+              alt=""
+            />
           </p>
         </div>
       </div>
@@ -121,18 +129,21 @@
           style="border-right: none"
           class="park-wrap"
         >
-          <p
-            [class]="park.status === 'unavailable' ? 'light' : 'dark'"
-            style="text-align: center; margin: 0"
-          >
+          <p class="light" style="text-align: center; margin: 0">
             {{
               park.parkingSize === 1
-                ? "small parking"
+                ? "S Parking"
                 : park.parkingSize === 2
-                ? "medium parking"
-                : "large parking"
+                ? "M Parking"
+                : "L Parking"
             }}
             - <b>{{ park.entryPoint }}{{ park.parkingSlot }}</b>
+            <img
+              *ngIf="park.status === 'unavailable'"
+              class="car"
+              src="../assets/yellow-car-removebg-preview.png"
+              alt=""
+            />
           </p>
         </div>
       </div>
@@ -140,10 +151,11 @@
   </div>
   <h3
     style="
-      margin-bottom: 400px;
+      margin-bottom: 370px;
       /* text-orientation: upright; */
       writing-mode: vertical-rl;
-      color: #565656;
+      color: #f9f9f9;
+      letter-spacing: 0.5rem;
     "
   >
     ENTRY &nbsp;<b>B > > ></b>
@@ -157,18 +169,21 @@
           style="border-left: none"
           class="park-wrap"
         >
-          <p
-            [class]="park.status === 'unavailable' ? 'light' : 'dark'"
-            style="text-align: center; margin: 0"
-          >
+          <p class="light" style="text-align: center; margin: 0">
             {{
               park.parkingSize === 1
-                ? "small parking"
+                ? "S Parking"
                 : park.parkingSize === 2
-                ? "medium parking"
-                : "large parking"
+                ? "M Parking"
+                : "L Parking"
             }}
             - <b>{{ park.entryPoint }}{{ park.parkingSlot }}</b>
+            <img
+              *ngIf="park.status === 'unavailable'"
+              class="car"
+              src="../assets/yellow-car-removebg-preview.png"
+              alt=""
+            />
           </p>
         </div>
       </div>
@@ -184,18 +199,21 @@
           style="border-right: none"
           class="park-wrap"
         >
-          <p
-            [class]="park.status === 'unavailable' ? 'light' : 'dark'"
-            style="text-align: center; margin: 0"
-          >
+          <p class="light" style="text-align: center; margin: 0">
             {{
               park.parkingSize === 1
-                ? "small parking"
+                ? "S Parking"
                 : park.parkingSize === 2
-                ? "medium parking"
-                : "large parking"
+                ? "M Parking"
+                : "L Parking"
             }}
             - <b>{{ park.entryPoint }}{{ park.parkingSlot }}</b>
+            <img
+              *ngIf="park.status === 'unavailable'"
+              class="car"
+              src="../assets/yellow-car-removebg-preview.png"
+              alt=""
+            />
           </p>
         </div>
       </div>
@@ -203,10 +221,11 @@
   </div>
   <h3
     style="
-      margin-bottom: 400px;
+      margin-bottom: 370px;
       /* text-orientation: upright; */
       writing-mode: vertical-rl;
-      color: #565656;
+      color: #f9f9f9;
+      letter-spacing: 0.5rem;
     "
   >
     ENTRY &nbsp;<b>C > > ></b>
@@ -220,18 +239,21 @@
         *ngIf="park.parkingSlot % 2 === 0"
       >
         <div style="border-left: none" class="park-wrap">
-          <p
-            [class]="park.status === 'unavailable' ? 'light' : 'dark'"
-            style="text-align: center; margin: 0"
-          >
+          <p class="light" style="text-align: center; margin: 0">
             {{
               park.parkingSize === 1
-                ? "small parking"
+                ? "S Parking"
                 : park.parkingSize === 2
-                ? "medium parking"
-                : "large parking"
+                ? "M Parking"
+                : "L Parking"
             }}
             - <b>{{ park.entryPoint }}{{ park.parkingSlot }}</b>
+            <img
+              *ngIf="park.status === 'unavailable'"
+              class="car"
+              src="../assets/yellow-car-removebg-preview.png"
+              alt=""
+            />
           </p>
         </div>
       </div>
