@@ -1,0 +1,34 @@
+<div class="container" *ngIf="vehicle">
+  <h2>Plate no.: {{ vehicle.plateNumber }}</h2>
+  <p style="margin-top: 0">
+    <b> Brand: {{ vehicle.brand }}</b>
+
+    ({{
+      vehicle.vehicleSize === "1"
+        ? "Small"
+        : vehicle.vehicleSize === "2"
+        ? "Medium"
+        : "Large"
+    }}
+    vehicle)
+  </p>
+  <hr />
+  <p>
+    Parking Time:&nbsp; <b>{{ vehicle.startTime | date : "medium" }}</b>
+  </p>
+  <p>
+    Total Hours:&nbsp; <b>{{ totalHours }}</b>
+  </p>
+  <p>
+    Total Price:&nbsp;<b>{{ totalPrice }}</b>
+  </p>
+
+  <button mat-flat-button color="primary" (click)="unPark()">Unpark</button>
+
+  <small
+    >Note:<i
+      >Hours are rounded based on minutes. Ex: if your parking total time is
+      6hrs and 30minutes it will round to 7</i
+    ></small
+  >
+</div>
