@@ -36,9 +36,6 @@ export class AppComponent {
       entryPoint: ['', Validators.required],
       vehicleSize: ['', Validators.required],
     });
-    // this.vehicleDetails.get('entryPoint')?.valueChanges.subscribe((res:any)=>{
-    //   if(res==)
-    // })
   }
 
   fetchParking() {
@@ -97,12 +94,5 @@ export class AppComponent {
         console.log(res);
         if (res) this.fetchParking();
       });
-  }
-
-  checkHisotry() {
-    const plate = 'JR07';
-    this.http.checkHisotry(plate).subscribe((res: any) => {
-      console.log(res);
-    });
   }
 }
