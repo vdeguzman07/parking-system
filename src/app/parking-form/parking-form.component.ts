@@ -27,7 +27,7 @@ export class ParkingFormComponent implements OnInit {
   constructor(private sb: MatSnackBar, private fb: FormBuilder) {
     this.vehicleDetails = this.fb.group({
       plateNumber: ['', Validators.required],
-      brand: ['', Validators.required],
+      // brand: ['', Validators.required],
       entryPoint: ['', Validators.required],
       vehicleSize: ['', Validators.required],
     });
