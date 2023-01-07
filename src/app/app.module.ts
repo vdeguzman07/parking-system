@@ -12,9 +12,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ParkingFormComponent } from './parking-form/parking-form.component';
 
 @NgModule({
-  declarations: [AppComponent, ParkComponent],
+  declarations: [AppComponent, ParkComponent, ParkingFormComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

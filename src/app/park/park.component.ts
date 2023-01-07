@@ -80,9 +80,6 @@ export class ParkComponent implements OnInit {
         const currentDaySucceedingHours = this.totalHours % 24;
         let day = totalDayFinal > 1 ? 'Days' : 'Day';
         this.totalDayTime = `${totalDayFinal} ${day} and ${currentDaySucceedingHours} Hours`;
-        console.log(
-          `${totalDayFinal} Days and ${currentDaySucceedingHours} Hours`
-        );
 
         // parking that exceeds days and has exceeding hours
         if (currentDaySucceedingHours !== 0) {

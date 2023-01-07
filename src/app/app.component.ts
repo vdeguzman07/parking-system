@@ -1,6 +1,7 @@
+import { ParkingFormComponent } from './parking-form/parking-form.component';
 import { ParkComponent } from './park/park.component';
 import { HttpService } from './../http/http.service';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,31 +12,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'parking-system';
+  formValue: any;
+  @ViewChild(ParkingFormComponent) parkingForm!: ParkingFormComponent;
   parkingArray: Array<any> = [];
   parkingA: Array<any> = [];
   parkingB: Array<any> = [];
   parkingC: Array<any> = [];
 
-  vehicleDetails: FormGroup;
-  checkIfExist: boolean = false;
-  entryPoint: Array<any> = ['A', 'B', 'C'];
-  vehicleSize: Array<any> = ['small', 'medium', 'large'];
-
   constructor(
     private http: HttpService,
-    private fb: FormBuilder,
     private dialog: MatDialog,
     private sb: MatSnackBar
   ) {
     this.fetchParking();
-
-    this.vehicleDetails = this.fb.group({
-      plateNumber: ['', Validators.required],
-      brand: ['', Validators.required],
-      entryPoint: ['', Validators.required],
-      vehicleSize: ['', Validators.required],
-    });
   }
 
   fetchParking() {
@@ -47,35 +36,35 @@ export class AppComponent {
     });
   }
 
+  getFormValues(event: any) {
+    this.formValue = event;
+    console.log(this.formValue);
+    this.startParking();
+  }
+
   getParkingArr(parking: string) {
     let arrCopy = this.parkingArray;
     return arrCopy.filter((p: any) => p.entryPoint === parking);
   }
 
-  openParking() {
-    const parkingValue = this.vehicleDetails.getRawValue();
-    let data = {
-      ...parkingValue,
-      startTime: new Date(),
-    };
-    console.log(data);
-
+  startParking() {
+    this.formValue.startTime = new Date();
     //CHECK HISTORY FOR CONTINOUS PAYMENT
-    this.http.checkHisotry(data.plateNumber).subscribe((res: any) => {
+    this.http.checkHisotry(this.formValue.plateNumber).subscribe((res: any) => {
       console.log(res);
       //IF VEHICLE CAMEBACK WITHIN 1HR CHARGE WILL CONTINUE
       if (res.continousPayment === true) {
         this.sb.open(
           'Our System Detected that you returned in our parking complex within 1 hour, continous rate will apply',
           'ok',
-          { duration: 6000 }
+          { duration: 15000, panelClass: ['failed'] }
         );
-        data.startTime = new Date(res.history[0].startTime);
+        this.formValue.startTime = new Date(res.history[0].startTime);
       }
 
-      this.http.startParking(data).subscribe((res: any) => {
+      this.http.startParking(this.formValue).subscribe((res: any) => {
         console.log(res);
-        this.vehicleDetails.reset();
+        this.parkingForm.vehicleDetails.reset();
         this.fetchParking();
       });
     });

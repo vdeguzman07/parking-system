@@ -1,51 +1,9 @@
 <div class="container">
   <div class="menu">
-    <div class="park-container">
-      <h3>Park Vehicle</h3>
-      <form [formGroup]="vehicleDetails">
-        <mat-form-field class="full-width" appearance="fill">
-          <mat-label>Plate Number</mat-label>
-          <input matInput formControlName="plateNumber" />
-          <mat-error
-            *ngIf="vehicleDetails.get('plateNumber')?.hasError('required')"
-          >
-            Plate Number is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="fill">
-          <mat-label>Brand</mat-label>
-          <input matInput formControlName="brand" />
-          <mat-error *ngIf="vehicleDetails.get('brand')?.hasError('required')">
-            Brand is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="fill">
-          <mat-label>Entry Point</mat-label>
-          <mat-select formControlName="entryPoint">
-            <mat-option *ngFor="let entry of entryPoint" [value]="entry">
-              {{ entry }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="fill">
-          <mat-label>Vehicle Size</mat-label>
-          <mat-select formControlName="vehicleSize">
-            <mat-option *ngFor="let size of vehicleSize" [value]="size">
-              {{ size }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </form>
-      <button
-        class="full-width"
-        mat-flat-button
-        color="primary"
-        [disabled]="vehicleDetails.invalid"
-        (click)="openParking()"
-      >
-        Park
-      </button>
-    </div>
+    <app-parking-form
+      #parkingForm
+      (emitValue)="getFormValues($event)"
+    ></app-parking-form>
   </div>
 
   <!-- PARK A -->

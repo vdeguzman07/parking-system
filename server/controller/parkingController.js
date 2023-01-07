@@ -19,6 +19,7 @@ exports.getParking = async (req, res, next) => {
   res.status(200).json({ parkings: parkings, total: parkings.length });
 };
 
+//CHECK IF VEHICLE's PAYMENT IS CONTINOUS
 exports.checkVehicleHistory = async (req, res, next) => {
   const { plateNo } = req.params;
 
@@ -42,6 +43,7 @@ exports.checkVehicleHistory = async (req, res, next) => {
   });
 };
 
+//PARK TO THE NEARES PARKING SLOT BASED ON ENTRY POINT AND SIZE
 exports.checkAvailableParking = async (req, res, next) => {
   const { entryPoint, vehicleSize } = req.body;
 
