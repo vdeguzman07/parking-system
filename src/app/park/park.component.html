@@ -17,10 +17,14 @@
     Parking Time:&nbsp; <b>{{ vehicle.startTime | date : "medium" }}</b>
   </p>
   <p>
-    Total Hours:&nbsp; <b>{{ totalHours }}</b>
+    Total Hours:&nbsp;
+    <b
+      >{{ totalHours }}
+      <strong *ngIf="totalDayTime">({{ totalDayTime }})</strong>
+    </b>
   </p>
   <p>
-    Total Price:&nbsp;<b>{{ totalPrice }}</b>
+    Total Price:&nbsp;<b>{{ totalPrice | currency : "PHP" : "₱" }}</b>
   </p>
 
   <button mat-flat-button color="primary" (click)="unPark()">Unpark</button>

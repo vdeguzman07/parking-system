@@ -60,9 +60,10 @@ export class AppComponent {
     };
     console.log(data);
 
-    //TODO ADD CHECK HISTORY FOR CONTINOUS PAYMENT
+    //CHECK HISTORY FOR CONTINOUS PAYMENT
     this.http.checkHisotry(data.plateNumber).subscribe((res: any) => {
       console.log(res);
+      //IF VEHICLE CAMEBACK WITHIN 1HR CHARGE WILL CONTINUE
       if (res.continousPayment === true) {
         this.sb.open(
           'Our System Detected that you returned in our parking complex within 1 hour, continous rate will apply',

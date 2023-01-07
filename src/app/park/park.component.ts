@@ -1,3 +1,4 @@
+import { ParkService } from './../park-service/park.service';
 import { HttpService } from './../../http/http.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -13,10 +14,12 @@ export class ParkComponent implements OnInit {
   defaultPrice = 40;
   totalHours: any;
   totalPrice: any;
+  totalDayTime: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ParkComponent>,
-    private http: HttpService
+    private http: HttpService,
+    private parkService: ParkService
   ) {
     console.log(data);
   }
@@ -24,77 +27,83 @@ export class ParkComponent implements OnInit {
   ngOnInit(): void {
     this.http.getVehicle(this.data.id).subscribe((res: any) => {
       this.vehicle = res.currentParking;
-      console.log(this.vehicle);
       this.parkingStartTime = res.currentParking.startTime;
-      let milliseconds =
+
+      //TIME CONVERTION
+      const milliseconds =
         new Date().getTime() - new Date(this.parkingStartTime).getTime();
-      let seconds = Math.floor(milliseconds / 1000);
-      let hours = Math.floor(milliseconds / 3600000);
-      let minutes = Math.floor(seconds / 60) % 60;
-
-      console.log(`${hours}:${minutes}`);
-
+      const seconds = this.parkService.milliSecondsToSeconds(milliseconds);
+      const hours = this.parkService.milliSecondsToHour(milliseconds);
+      const minutes = this.parkService.secondsToMinute(seconds);
       this.totalHours = hours;
+
       //roundup if minutes is >=30
       if (minutes > 29) this.totalHours = this.totalHours + 1;
 
-      console.log(this.totalHours, 'TOTALLLLLL');
-      //LOGIC IN CALCULATION OF FEES
-
-      if (this.totalHours < 4) {
-        this.totalPrice = this.defaultPrice;
-      } else if (this.totalHours > 3 && this.totalHours < 24) {
+      //If parking time does not exceed to 3hrs
+      if (this.totalHours < 4) this.totalPrice = this.defaultPrice;
+      //If parking time exceed to 3hrs but less than 1day
+      else if (this.totalHours > 3 && this.totalHours < 24) {
         if (this.data.parkingSize === 1) {
-          const multiplierPrice = 20;
+          const multiplierPricePerHour = 20;
           const multiplier = this.totalHours - 3;
 
-          const totalPayable = this.defaultPrice + multiplierPrice * multiplier;
-          this.totalPrice = totalPayable;
-          console.log(this.totalPrice);
+          this.totalPrice =
+            this.defaultPrice + multiplierPricePerHour * multiplier;
         }
         if (this.data.parkingSize === 2) {
-          const multiplierPrice = 60;
+          const multiplierPricePerHour = 60;
           const multiplier = this.totalHours - 3;
 
-          const totalPayable = this.defaultPrice + multiplierPrice * multiplier;
-          this.totalPrice = totalPayable;
-          console.log(this.totalPrice);
+          this.totalPrice =
+            this.defaultPrice + multiplierPricePerHour * multiplier;
         }
         if (this.data.parkingSize === 3) {
-          const multiplierPrice = 100;
+          const multiplierPricePerHour = 100;
           const multiplier = this.totalHours - 3;
 
-          const totalPayable = this.defaultPrice + multiplierPrice * multiplier;
-          this.totalPrice = totalPayable;
-          console.log(this.totalPrice);
+          this.totalPrice =
+            this.defaultPrice + multiplierPricePerHour * multiplier;
         }
-      } else if (this.totalHours >= 24) {
-        this.totalPrice = 5000;
-        const staticPrice = 5000;
-        if (this.data.parkingSize === 1) {
-          const multiplierPrice = 20;
-          const multiplier = this.totalHours - 3;
+      }
+      //If parking time exceeds or equal to 1 day
+      else if (this.totalHours >= 24) {
+        let basePricePerWholeDay = 5000;
+        // this.totalHours = 48;
 
-          const totalPayable = staticPrice + multiplierPrice * multiplier;
-          this.totalPrice = totalPayable;
-          console.log(this.totalPrice);
-        }
-        if (this.data.parkingSize === 2) {
-          const multiplierPrice = 60;
-          const multiplier = this.totalHours - 3;
+        let totalDay = this.totalHours / 24;
+        const totalDayFinal: any = totalDay.toFixed(0);
+        const totalPrice = totalDayFinal * basePricePerWholeDay;
+        console.log(totalPrice);
 
-          const totalPayable = staticPrice + multiplierPrice * multiplier;
-          this.totalPrice = totalPayable;
-          console.log(this.totalPrice);
-        }
-        if (this.data.parkingSize === 3) {
-          const multiplierPrice = 100;
-          const multiplier = this.totalHours - 3;
+        //exceeding hours of the day
+        const currentDaySucceedingHours = this.totalHours % 24;
+        let day = totalDayFinal > 1 ? 'Days' : 'Day';
+        this.totalDayTime = `${totalDayFinal} ${day} and ${currentDaySucceedingHours} Hours`;
+        console.log(
+          `${totalDayFinal} Days and ${currentDaySucceedingHours} Hours`
+        );
 
-          const totalPayable = staticPrice + multiplierPrice * multiplier;
-          this.totalPrice = totalPayable;
-          console.log(this.totalPrice);
+        // parking that exceeds days and has exceeding hours
+        if (currentDaySucceedingHours !== 0) {
+          if (this.data.parkingSize === 1) {
+            const multiplierPricePerHour = 20;
+            this.totalPrice =
+              totalPrice + multiplierPricePerHour * currentDaySucceedingHours;
+          }
+          if (this.data.parkingSize === 2) {
+            const multiplierPricePerHour = 60;
+            this.totalPrice =
+              totalPrice + multiplierPricePerHour * currentDaySucceedingHours;
+          }
+          if (this.data.parkingSize === 3) {
+            const multiplierPricePerHour = 100;
+            this.totalPrice =
+              totalPrice + multiplierPricePerHour * currentDaySucceedingHours;
+          }
         }
+        //WILL DISPLAY STATIC PRICING FOR WHOLE DAYS with no exceeding hours >>> 5,000 per day
+        else this.totalPrice = totalPrice;
       }
     });
   }
